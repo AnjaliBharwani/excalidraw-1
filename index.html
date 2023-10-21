@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/favicon.jpg" type="image/x-icon" />
- 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excalidraw</title>
+    <link rel="icon" type="image/x-icon" href="/assets/logo.ico.png">
+    <link rel="stylesheet" href="./style.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -13,71 +13,66 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Document</title>
-
-  </head>
-  <body>
-    <div id="excalidraw">
-        <section>
-      <div class="app-menu-top">
-        <div class="top-left">
-            <div class="icon-left"><i class="fa-solid fa-bars"></i></div>
-        </div>
-        <div class="top-middle">
-            <div class="toll-icon toll-icon-1"> <i class="fa-solid fa-lock"></i></div>
-            <div class="vertical-line"></div>
-            <div class="toll-icon"> <i class="fa-regular fa-hand"></i></div>
-            <div class="toll-icon"> <i class="fa-regular fa-hand"></i></div>
-            <!-- <div class="toll-icon"> <i class="fa-thin fa-square-up-left"></i></div> -->
-            <div class="toll-icon"> <i class="fa-regular fa-square"></i></div>
-            <div class="toll-icon" toll-icon-1> <i class="fa-solid fa-arrow-pointer"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-arrow-pointer"></i></div>
-            <div class="toll-icon"> <i class="fa-regular fa-circle"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-arrow-right"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-minus"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-pen"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-font"></i></div>
-            <div class="toll-icon"> <i class="fa-regular fa-image"></i></div>
-            <div class="toll-icon"> <i class="fa-solid fa-eraser"></i></div>
-            <div class="vertical-line"></div>
-            <div class="toll-icon"> <i class="fa-solid fa-screwdriver-wrench"></i></div>
-
-            <!-- <label class="ToolIcon Shape fillable" title="Selection — V or 1"><input class="ToolIcon_type_radio ToolIcon_size_medium" type="radio" name="editor-current-shape" aria-label="Selection" aria-keyshortcuts="V or 1" data-testid="toolbar-selection" id="uSFU5FjKhxoE2XuJWNnZG-undefined" checked=""><div class="ToolIcon__icon"><svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 22 22" class="" fill="none" stroke-width="1.25"><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 6l4.153 11.793a0.365 .365 0 0 0 .331 .207a0.366 .366 0 0 0 .332 -.207l2.184 -4.793l4.787 -1.994a0.355 .355 0 0 0 .213 -.323a0.355 .355 0 0 0 -.213 -.323l-11.787 -4.36z"></path><path d="M13.5 13.5l4.5 4.5"></path></g></svg><span class="ToolIcon__keybinding">1</span></div></label> -->
-        </div>
-        <div id="right"class="top-right">
-            <div id="right-1" class="icon-right right-1 "><i class="fa-solid fa-user-group"></i></div>
-            <div>
-            <div id="right-2" class="icon-right right-2"><i class="fa-solid fa-book-open-reader"></i>       library
-        </div>
-        </div>
-      </div>
-    </div>
-    </section>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <footer>
-        <div class="footer">
-            <div class="left-footer">
-                <div class="left-footer-1">
-                    <div class="inside-footer"><i class="fa-solid fa-minus"></i></div>
-                    <div class="vertical-line"></div>
-                    <div class="inside-footer">100%</div>
-                    <div class="vertical-line"></div>
-                    <div class="inside-footer"><i class="fa-solid fa-plus"></i></div>
-                </div>
-                <div class="left-footer-2">
-                    <div class="inside-footer"><i class="fa-solid fa-reply"></i></div>
-                    <div class="vertical-line"></div>
-                    <div class="inside-footer"><i class="fa-solid fa-reply fa-rotate-180"></i></div>
-                </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <div id="root">
+        <div id="top">
+            <button class="material-icons menu ">menu</button>
+            <div class="options">
+                <button class="btn btn-lock material-symbols-outlined" >lock</button>
+                <button class="btn material-symbols-outlined pan_tool" >pan_tool</button>
+                <button class="btn material-symbols-outlined" >north_west</button>
+                <button class="btn material-symbols-outlined" >check_box_outline_blank</button>
+                <button class="btn material-symbols-outlined" >circle</button>
+                <button class="btn material-symbols-outlined" >north_east</button>
+                <button class="btn material-symbols-outlined" >horizontal_rule</button>
+                <button class="btn material-symbols-outlined" >text_format</button>
+                <!-- <button class="btn material-icons">edit</button> -->
+                <button class="btn material-icons" id="pencil">edit</button>
+                <button class="btn material-symbols-outlined">brightness_1</button>
+                <button class="btn material-symbols-outlined">check_box_outline_blank</button>
+                <button id="clear" class="btn material-symbols-outlined">ink_eraser</button>
+                <button class="btn material-symbols-outlined">image</button>
+                <button class="btn material-symbols-outlined">construction</button>
+                <input type="color" id="color-picker">
             </div>
+            <div class="lib-option">
+                <button class="lib-btn1 material-symbols-outlined">group</button>
+                <button class="lib-btn2 material-symbols-outlined">dictionary</button>
+            </div>
+        </div>
+        <canvas id="canvas"></canvas>
+        <div id="bottom">
+        <div id="bottom1">
+            <div class="options bootom-inside">
+                <button class="btn material-icons">remove</button>
+                <div class=" btn">100%</div>
+                <button class="btn material-icons">add</button>
+            </div>
+            <div class="options bootom-inside">
+                <button class="btn material-icons">undo</button>
+                <button class="btn material-icons">redo</button>
+            </div> 
+        </div>
+        <div id="bottom2">
+            <div class="options bootom-inside">
+                <button class="btn bootom-inside1 material-icons options">verified_user</button>
+                <button class="btn bootom-inside2 material-icons options">help</button>
+            </div> 
+        </div> 
+
+        </div>
+        
            
-            <div class="right-footer">
-                <div class="inside-right-footer"><i class="fa-solid fa-circle-check" style="color: #276add;"></i></div>
-                <div class="inside-right-footer inside-ri8-footer"><i class="fa-regular fa-circle-question"></i></div>
-            </div>
-
-        </div>
-    </footer>
     </div>
-  </body>
+   
+    <script src="./script.js"></script>
+
+</body>
 </html>
