@@ -1,161 +1,232 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
 
 * {
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
-#root {
-    width: 100vw ;
+
+#container {
     height: 100vh;
+    width: 100vw;
+    position: relative;
     overflow: hidden;
-    position: relative ;
 }
-#canvas {
-    cursor: auto;
+
+.divident {
+    border: 1px solid #f1f0ff;
+    margin-inline: 5px;
+    height: 40%;
 }
+
+#themeBox {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.round {
+    border-radius: 14px;
+}
+
 #top {
-    /* position: absolute; */
+    position: fixed;
     width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 10;
-    padding: 10px;
+    background: #030064;
+    /* padding: 15px; */
 }
-#top > .options{ 
+
+.right-top {
+    display: flex;
+    position: fixed;
+    right: 60px;
+    gap: 8px;
+    right: 20px;
+    top: 10px;
+}
+
+#top>.options {
     background-color: #fff;
     display: flex;
     align-items: center;
-    gap: 10px; 
+    gap: 5px;
     border-radius: 10px;
-    padding: 4px 20px; 
-    box-shadow: 2px 2px 6px #E1E1E1;
-    border: 2px solid #E6E6E6
+    padding: 0px 10px;
+    height: 50px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    position: absolute;
+    float: right;
+    left: 35%;
+    top: 12px;
 }
+
 .menu {
-    background-color: #ECECF4;
-    border-radius: 10px;
-    border: none;
-    padding: 5px;
+    background-color: #ECECF3 !important;
+    border-radius: 4px !important;
+    position: fixed;
+    top: 11px;
+    left: 12px;
 }
+
 .btn {
-    border: transparent;
-    padding: 8px 6px; 
+    border: none;
+    padding: 10px;
     background-color: transparent;
     cursor: pointer;
     font-size: 16px !important;
+    transition: all 0.2s linear 0s;
 }
 
-.btn:hover{
-    background-color: #ECECF3;
-    border-radius: 4px;
-}
+.btn:hover,
 .active {
-    background-color: white;
+    background-color: #e0dfff;
     border-radius: 4px;
-    color: #3a34eb;
+    color: #030064;
 }
-/* .bottom{
+
+#canvas {
+    width: 100vw;
+    height: 100vh;
+    background: white;
+}
+
+#bottom {
     display: flex;
-    justify-content: space-between;
-} */
-/* 
-#bottom1{
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
     z-index: 100;
-    left: 20px;
     bottom: 20px;
-    gap: 20px;
-    
-} */
-#bottom1 > .options {
-    background-color: #d1d1f2;
-    /* padding: 4px 10px; */
+    width: 100%;
+    justify-content: space-between;
+}
+
+#zoom {
+    height: auto;
+    width: 100%;
+}
+
+#bottom .options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ececf4;
+    padding: 4px 10px;
     border-radius: 5px;
+}
+
+.bottom-left {
+    display: flex;
+    gap: 8px;
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+}
+
+.bottom-right {
+    display: flex;
+    position: fixed;
+    right: 60px;
+    bottom: 12px;
+    gap: 8px;
+}
+
+.disp {
+    display: none;
+}
+
+.display {
     display: flex;
 }
 
-.vertical-line{
-    border-left: 1px solid rgb(70, 53, 53);
-    line-height: 5px;
-}
-.lib-option{
-    gap: 20px;
-    /* border-radius: 10px; */
-}
-.lib-btn1{
-    background-color: #4a4ad8;
+.user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
     color: white;
-    border-radius: 10px;
-    border: none;
-    padding: 5px;
-}
-div >  button> span{
-    font-family: 'Arial';
-    font-size: 16px;
-    text-align: center;
-    padding: 10px;
-    padding-bottom: 10px;
-    border: transparent;
-    background-color: transparent;
+    background: #6965db;
+    padding: 8px;
     cursor: pointer;
 }
 
-.lib-btn2{
-    background-color: #ECECF4;
-    border-radius: 10px;
-    border: none;
-    padding: 5px;
-    /* font-family: 'Poppins', sans-serif;  */
-    margin-right: 20px;
-    /* font-weight: 600; */
+.lib {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ececf4;
+    border-radius: 8px;
+    width: 100%;
+    gap: 5px;
+    padding: 9px;
+    cursor: pointer;
 }
-#bottom{
+
+.user:hover,
+.lib:hover {
+    background: #540078;
+    color: white;
+    transition: all 0s ease 0s;
+}
+
+.width-card {
+    padding: 40px 20px;
     position: absolute;
+    left: 1%;
+    background: #fffcfc;
+    top: 18%;
     display: flex;
+    height: 50%;
+    width: 150px;
     justify-content: space-between;
-    z-index: 100;
-    left: 20px;
-    bottom: 20px;
-    gap: 79vw;
-}
-#bottom1{
-    /* justify-content: space-between; */
-    display: flex;
+    border-radius: 19px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    flex-direction: column;
     gap: 20px;
-    
 }
-.bootom-inside{
+
+.width-btns,
+.fill_background {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.canvas-btns {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
 }
 
-.bootom-inside1{ 
-    background-color: #ECECF3;
-    border-radius: 4px;
-    padding: 10px;
-    color: #4a4ad8;
- }
+.button-34,
+.button-23 {
+    padding: 9px 0px;
+    width: 85%;
+    background: #030064;
+    border: none;
+    color: white;
+    outline: none;
+    border-radius: 9px;
+    box-shadow: 3px 2px 8px 1px grey;
+}
 
- .bootom-inside2{ 
-    background-color: #ECECF3;
-    border-radius: 4px;
-    padding: 10px;
- }
+.button-23 {
+    background: #00b831;
+    color: white;
+}
 
- @media only screen and (max-width: 760px) and (min-width: 310px) { 
-    .menu{
-        color: blue;
-        display: none;
-    }
-    .lib-option{
-        display: none;
-    }
-    .lib-btn2, .pan_tool{
-        display: none;
-    }
-    
-    
+button:hover {
+    cursor: pointer;
+}
 
- };
+#undoBtn,
+#redoBtn {
+    background: none;
+    border: none;
+    padding: 6px;
+}

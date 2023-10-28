@@ -3,76 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="stylesheet" href="style.css">
     <title>Excalidraw</title>
-    <link rel="icon" type="image/x-icon" href="/assets/logo.ico.png">
-    <link rel="stylesheet" href="./style.css">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
-    <div id="root">
+    <div id="container">
         <div id="top">
-            <button class="material-icons menu ">menu</button>
+            <button id="menuBtn" class="material-icons menu btn">menu</button>
             <div class="options">
-                <button class="btn btn-lock material-symbols-outlined" >lock</button>
-                <button class="btn material-symbols-outlined pan_tool" >pan_tool</button>
-                <button class="btn material-symbols-outlined" >north_west</button>
-                <button class="btn material-symbols-outlined" >check_box_outline_blank</button>
-                <button class="btn material-symbols-outlined" >circle</button>
-                <button class="btn material-symbols-outlined" >north_east</button>
-                <button class="btn material-symbols-outlined" >horizontal_rule</button>
-                <button class="btn material-symbols-outlined" >text_format</button>
-                <!-- <button class="btn material-icons">edit</button> -->
-                <button class="btn material-icons" id="pencil">edit</button>
-                <button class="btn material-symbols-outlined">brightness_1</button>
-                <button class="btn material-symbols-outlined">check_box_outline_blank</button>
-                <button id="clear" class="btn material-symbols-outlined">ink_eraser</button>
-                <button class="btn material-symbols-outlined">image</button>
-                <button class="btn material-symbols-outlined">construction</button>
-                <input type="color" id="color-picker">
+
+                <button class="btn material-symbols-outlined" id="lock">lock_open</button>
+                <div class="divident"></div>
+                <button class="btn material-icons tool" id="pencil">edit</button>
+
+                <label for="color-picker" id="color-pick" class="btn active material-symbols-outlined">
+                    palette
+                    <input type="color" class="disp" id="color-picker">
+                </label>
+
+
+                <button class="btn material-symbols-outlined press tool" id="square">check_box_outline_blank</button>
+                <button class="btn material-symbols-outlined press tool" id="oblique">nearby</button>
+                <button class="btn material-symbols-outlined press tool" id="triangle">change_history</button>
+                <button class="btn material-symbols-outlined press tool" id="circle">trip_origin</button>
+                <button class="btn material-symbols-outlined press tool" id="elipse">panorama_fish_eye</button>
+                <button class="btn material-symbols-outlined press tool" id="line">horizontal_rule</button>
+                <button class="btn material-symbols-outlined press tool" id="eraser">ink_eraser</button>
+                <!-- <button class="btn material-symbols-outlined press">trending_flat</button> -->
+                <!-- <button class="btn material-symbols-outlined press">insert_text</button> -->
+                <!-- <button class="btn material-symbols-outlined press">hand_gesture</button> -->
+                <!-- <button class="btn material-symbols-outlined press">arrow_selector_tool</button> -->
+                <div class="divident"></div>
+                <button class="btn material-symbols-outlined" id="category">category</button>
             </div>
-            <div class="lib-option">
-                <button class="lib-btn1 material-symbols-outlined">group</button>
-                <button class="lib-btn2 material-symbols-outlined">dictionary</button>
+            <div class="right-top">
+                <div class="user"><span class="material-symbols-outlined">group</span></div>
+                <div class="lib"><span class="material-symbols-outlined">import_contacts</span>Library</div>
+            </div>
+        </div>
+        <div id="widthBox" class="width-card">
+
+            <div id="themeBox">
+                <label for="themeColor">Background</label>
+                <label id="chooseTheme" class="round btn material-symbols-outlined" for="themeColor">
+                    wallpaper
+                    <input type="color" class="disp" id="themeColor">
+                </label>
+            </div>
+
+            <div class="width-btns">
+                <label for="widthSize">Stroke Size</label>
+                <input type="range" id="widthSize" min="1" max="20" value="2">
+            </div>
+
+            <div class="fill_background">
+                <label for="fillColor">Fill Color</label>
+                <input type="checkbox" id="fillColor">
+                <label id="BGLable" class="round btn material-symbols-outlined">
+                    format_paint
+                    <input type="color" class="disp" id="bgColorpicker">
+                </label>
+            </div>
+
+            <div class="canvas-btns">
+                <button class="button-34" id="clearBtn" role="button">Clear Board</button>
+                <button class="button-23" id="saveBtn" role="button">Save Paint</button>
             </div>
         </div>
         <canvas id="canvas"></canvas>
         <div id="bottom">
-        <div id="bottom1">
-            <div class="options bootom-inside">
-                <button class="btn material-icons">remove</button>
-                <div class=" btn">100%</div>
-                <button class="btn material-icons">add</button>
+            <div class="bottom-left">
+                <div class="options nonedisp">
+                    <button class="btn material-symbols-outlined">add</button>
+                    <div id="zoom" class="btn"></div>
+                    <button class="btn material-symbols-outlined">remove</button>
+                </div>
+                <div class="options undoredo">
+                    <button id="undoBtn" class="material-icons">undo</button>
+                    <button id="redoBtn" class="material-icons">redo</button>
+                </div>
             </div>
-            <div class="options bootom-inside">
-                <button class="btn material-icons">undo</button>
-                <button class="btn material-icons">redo</button>
-            </div> 
+            <div class="bottom-right">
+                <span class="material-symbols-outlined">
+                    verified_user
+                </span>
+                <span class="material-symbols-outlined">
+                    help
+                </span>
+            </div>
         </div>
-        <div id="bottom2">
-            <div class="options bootom-inside">
-                <button class="btn bootom-inside1 material-icons options">verified_user</button>
-                <button class="btn bootom-inside2 material-icons options">help</button>
-            </div> 
-        </div> 
-
-        </div>
-        
-           
     </div>
-   
-    <script src="./script.js"></script>
-
+    <script src="colors.js"></script>
+    <script src="script.js"></script>
+    <script src="resize.js"></script>
+    <script src="tochMotions.js"></script>
+    <script src="undoredo.js"></script>
 </body>
 </html>
