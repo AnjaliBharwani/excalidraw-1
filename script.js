@@ -1,193 +1,577 @@
-const canvas = document.getElementById("canvas");
+// Initialize the drawing canvas and various tools
+const canvas = document.getElementById('canvas');
+const body = document.getElementById('main');
 const toolBtns = document.querySelectorAll(".tool");
-const ctx = canvas.getContext("2d");
-const sizeAdjust = document.getElementById("widthSize");
-const menuBtn = document.getElementById("menuBtn");
-const pencil = document.getElementById("pencil");
-const widthBox = document.getElementById("widthBox");
+const fillColor = document.querySelector("#fill-color");
+const colorBtns = document.querySelectorAll(".stroke .option");
+const bgColorBtns = document.querySelectorAll(".bg-color .option");
+const colorPicker = document.querySelector("#color-picker");
+const bgColorPicker = document.querySelector("#bgColor-picker");
+const widthBtns = document.querySelectorAll(".width-btn");
 
-const drawingHistory = [];
-const redoHistory = [];
-let pathCount = 0;
 
+// Define the canvas context
+ctx = canvas.getContext("2d");
+// Function to resize the canvas
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+// Initialize drawing variables and state
+let isDrawing = false;
+let selectedTool = "hand";
+let strokeWidth = 3;
 let prevMouseX;
 let prevMouseY;
 let snapshot;
-let isDrawing = false;
-let selectedTool = "";
-let brushWidth = 2;
-let drawingColor = "black";
-let bgColor = "black";
-let canvasBG = "white";
+let selectedBgColor = "none";
+let selectedColor = "#1e1e1e";
 
-const isactiveClass = () => {
-  for (let i = 0; i < toolBtns.length; i++) {
-    if (toolBtns[i].classList.contains("active")) {
-      return true;
+function toggleMenu() {
+    var menu = document.querySelector('.dropdown-menu');
+    if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "flex";
     } else {
-      return false;
+        menu.style.display = "none";
     }
-  }
-};
+}
 
-const drawRect = (e) => {
-  if (!fillColor.checked) {
-    return ctx.strokeRect(
-      e.offsetX,
-      e.offsetY,
-      prevMouseX - e.offsetX,
-      prevMouseY - e.offsetY
-    );
-  }
-  ctx.fillRect(
-    e.offsetX,
-    e.offsetY,
-    prevMouseX - e.offsetX,
-    prevMouseY - e.offsetY
-  );
-};
+// Function to handle the click event on width buttons
+widthBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
 
-const drawCircle = (e) => {
-  ctx.beginPath();
-  let radius = Math.sqrt(
-    Math.pow(prevMouseX - e.offsetX, 2) + Math.pow(prevMouseY - e.offsetY, 2)
-  );
-  ctx.arc(prevMouseX, prevMouseY, radius, 0, 2 * Math.PI);
-  fillColor.checked ? ctx.fill() : ctx.stroke();
-};
+        widthBtns.forEach(btn => btn.classList.remove("active"));
 
-const drawElipse = (e) => {
-  ctx.beginPath();
-  const radiusX = Math.abs(e.offsetX - prevMouseX);
-  const radiusY = Math.abs(e.offsetY - prevMouseY);
-  const rotation = 0;
-  const startAngle = 0;
-  const endAngle = 2 * Math.PI;
+        if (e.target.id === "small") {
+            strokeWidth = 3;
+        }
+        if (e.target.id === "mid") {
+            strokeWidth = 8;
+        }
+        if (e.target.id === "thick") {
+            strokeWidth = 12;
+        }
 
-  ctx.ellipse(
-    prevMouseX,
-    prevMouseY,
-    radiusX,
-    radiusY,
-    rotation,
-    startAngle,
-    endAngle
-  );
-
-  fillColor.checked ? ctx.fill() : ctx.stroke();
-};
-
-const drawOblique = (e) => {
-  const centerX = (prevMouseX + e.offsetX) / 2;
-  const centerY = (prevMouseY + e.offsetY) / 2;
-  ctx.beginPath();
-  ctx.moveTo(centerX, prevMouseY);
-  ctx.lineTo(e.offsetX, centerY);
-  ctx.lineTo(centerX, e.offsetY);
-  ctx.lineTo(prevMouseX, centerY);
-  ctx.closePath();
-  fillColor.checked ? ctx.fill() : ctx.stroke();
-};
-
-const startDraw = (e) => {
-  if (isactiveClass) {
-    isDrawing = true;
-    prevMouseX = e.offsetX;
-    prevMouseY = e.offsetY;
-    ctx.beginPath();
-    ctx.lineWidth = brushWidth;
-    ctx.strokeStyle = colorPicker.value;
-    ctx.fillStyle = bgColorpicker.value;
-    widthBox.classList.add("disp");
-    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  } else isDrawing = false;
-};
-
-const drawLine = (e) => {
-  ctx.beginPath();
-  ctx.moveTo(prevMouseX, prevMouseY);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-};
-
-const drawTriangle = (e) => {
-  ctx.beginPath();
-
-  const sideLength = Math.abs(prevMouseX - e.offsetX);
-  const height = sideLength * (Math.sqrt(3) / 2);
-
-  const x1 = prevMouseX - sideLength / 2;
-  const y1 = prevMouseY + height / 2;
-
-  const x2 = prevMouseX + sideLength / 2;
-  const y2 = prevMouseY + height / 2;
-
-  const x3 = prevMouseX;
-  const y3 = prevMouseY - height / 2;
-
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.lineTo(x3, y3);
-  ctx.closePath();
-
-  fillColor.checked ? ctx.fill() : ctx.stroke();
-};
-
-const eraseDrawing = (e) => {
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.strokeStyle = canvasBG;
-  ctx.stroke();
-};
-
-const freeHandPencil = (e) => {
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-};
-
-const drawing = (e) => {
-  if (!isDrawing) return;
-  ctx.putImageData(snapshot, 0, 0);
-  widthBox.style.display = "none";
-  if (selectedTool === "pencil" && isactiveClass) {
-    freeHandPencil(e);
-  } else if (selectedTool === "square" && isactiveClass) {
-    drawRect(e);
-  } else if (selectedTool === "circle" && isactiveClass) {
-    drawCircle(e);
-  } else if (selectedTool === "line" && isactiveClass) {
-    drawLine(e);
-  } else if (selectedTool === "triangle" && isactiveClass) {
-    drawTriangle(e);
-  } else if (selectedTool === "oblique" && isactiveClass) {
-    drawOblique(e);
-  } else if (selectedTool === "eraser" && isactiveClass) {
-    eraseDrawing(e);
-  } else if (selectedTool === "elipse" && isactiveClass) {
-    drawElipse(e);
-  } else {
-    isDrawing = false;
-  }
-};
-
-toolBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tool").forEach((e) => {
-      e.classList.remove("active");
+        e.target.classList.add("active");
     });
-
-    btn.classList.add("active");
-    selectedTool = btn.id;
-    if (selectedTool === "pencil") {
-      pencil.addEventListener("click", () => {
-        pencil.classList.remove("active");
-      });
-    }
-
-    widthBox.style.display = "flex";
-    console.log(selectedTool);
-  });
 });
 
+const drawRect = (e) => {
+    if (!fillColor.checked) {
+        ctx.strokeRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY);
+    } else {
+        ctx.fillRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY);
+        ctx.strokeRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY);
+    }
+};
+
+const drawDiamond = (e) => {
+    ctx.beginPath();
+
+    const centerX = (e.offsetX + prevMouseX) / 2;
+    const centerY = (e.offsetY + prevMouseY) / 2;
+
+    ctx.moveTo(centerX, e.offsetY); // Top point
+    ctx.lineTo(e.offsetX, centerY);  // Right point
+    ctx.lineTo(centerX, prevMouseY); // Bottom point
+    ctx.lineTo(prevMouseX, centerY);  // Left point
+
+    ctx.closePath();
+    ctx.stroke();
+
+    if (fillColor.checked) {
+        ctx.fillStyle = selectedBgColor;
+        ctx.fill();
+    };
+}
+
+const drawCircle = (e) => {
+    ctx.beginPath();
+    const centerX = (prevMouseX + e.offsetX) / 2;
+    const centerY = (prevMouseY + e.offsetY) / 2;
+    // Calculate the radii (half-width and half-height) of the ellipse
+    const radiusX = Math.abs(e.offsetX - prevMouseX) / 2;
+    const radiusY = Math.abs(e.offsetY - prevMouseY) / 2;
+
+    // Set the rotation angle of the ellipse (0 for a normal ellipse)
+    const rotation = 0;
+
+    // Draw the ellipse
+    ctx.ellipse(centerX, centerY, radiusX, radiusY, rotation, 0, 2 * Math.PI);
+    fillColor.checked ? ctx.fill() : ctx.stroke(); // if fillColor is checked fill circle else draw border circle
+    ctx.stroke(); // Draw the outline of the ellipse
+};
+
+const drawArrow = (e) => {
+    ctx.beginPath();
+
+    ctx.moveTo(prevMouseX, prevMouseY);
+
+    ctx.lineTo(e.offsetX, e.offsetY);
+
+    const angle = Math.atan2(e.offsetY - prevMouseY, e.offsetX - prevMouseX); // Calculate the angle of the arrow
+
+    const arrowHeadLength = 20; // Arrowhead length
+
+    ctx.stroke();
+
+    // Draw the arrowhead tip as lines
+    ctx.save();
+    ctx.translate(e.offsetX, e.offsetY);
+    ctx.rotate(angle);
+
+    // Draw the arrowhead lines
+    ctx.moveTo(-arrowHeadLength, arrowHeadLength);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(-arrowHeadLength, -arrowHeadLength);
+
+    ctx.restore();
+    ctx.stroke();
+}
+
+const drawLine = (e) => {
+    ctx.beginPath();
+
+    ctx.moveTo(prevMouseX, prevMouseY);
+
+    ctx.lineTo(e.offsetX, e.offsetY);
+
+    const angle = Math.atan2(e.offsetY - prevMouseY, e.offsetX - prevMouseX); // Calculate the angle of the arrow
+
+    const arrowHeadLength = 20; // Arrowhead length
+
+    ctx.stroke();
+
+    // Draw the arrowhead lines
+    ctx.moveTo(-arrowHeadLength, arrowHeadLength);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(-arrowHeadLength, -arrowHeadLength);
+
+    ctx.restore();
+    ctx.stroke();
+}
+
+// Function to handle the start of drawing
+const startDraw = (e) => {
+    isDrawing = true;
+    prevMouseX = e.offsetX; // current mouse x position
+    prevMouseY = e.offsetY; // current mouse y position
+    ctx.beginPath(); // creating new path when drawing
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = strokeWidth;
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height); // passing canvas data will avoid the dragging image issue
+    ctx.strokeStyle = selectedColor;
+    ctx.fillStyle = selectedBgColor;
+}
+
+// Function to handle ongoing drawing
+const drawing = (e) => {
+    if (!isDrawing) return;
+    ctx.putImageData(snapshot, 0, 0); //adding copied canvas data on to this canvas
+
+    if (selectedTool === "pencil") {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+    else if (selectedTool === "square") {
+        drawRect(e);
+    }
+    else if (selectedTool === "diamond") {
+        drawDiamond(e);
+    }
+    else if (selectedTool === "circle") {
+        drawCircle(e);
+    }
+    else if (selectedTool === "arrow") {
+        drawArrow(e);
+    }
+    else if (selectedTool === "line") {
+        drawLine(e);
+    }
+    else if (selectedTool === "eraser") {
+        const eraserSize = strokeWidth * 4; // Adjust the multiplier as needed
+        ctx.lineWidth = eraserSize; // Increase the eraser size
+        ctx.globalCompositeOperation = "destination-out"; // Use "destination-out" to erase
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        ctx.globalCompositeOperation = "source-over"; // Reset composite operation
+        ctx.lineWidth = strokeWidth; // Reset the line width to its original value
+    }
+};
+
+toolBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".tool.active").forEach(element => {
+            element.classList.remove("active");
+        });
+        btn.classList.add("active");
+        selectedTool = btn.id;
+
+        if (selectedTool === "square" || selectedTool === "circle" || selectedTool === "pencil"
+            || selectedTool === "diamond" || selectedTool === "arrow" || selectedTool === "line") {
+            canvas.style.cursor = "crosshair";
+            document.querySelector(".color-palette").style.left = "30px";
+        }
+        else if (selectedTool === "hand") {
+            canvas.style.cursor = "grab";
+            document.querySelector(".color-palette").style.left = "-250px";
+        }
+        else {
+            canvas.style.cursor = "default";
+            document.querySelector(".color-palette").style.left = "-250px";
+        }
+    });
+});
+
+colorBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
+    });
+});
+
+bgColorBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        selectedBgColor = window.getComputedStyle(btn).getPropertyValue("background-color");
+    });
+});
+
+colorPicker.addEventListener("change", () => {
+    colorPicker.parentElement.style.background = colorPicker.value;
+    colorPicker.parentElement.click();
+});
+
+bgColorPicker.addEventListener("change", () => {
+    bgColorPicker.parentElement.style.background = bgColorPicker.value;
+    bgColorPicker.parentElement.click();
+});
+
+canvas.addEventListener("mouseup", () => isDrawing = false);
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", drawing);
-sizeAdjust.addEventListener("change", () => (brushWidth = sizeAdjust.value));
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const menuButton = document.querySelector('.b1');
+    const colorPalette = document.querySelector('.color-palette');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    const toolButtons = document.querySelectorAll('.tool');
+
+
+    function hideDropdownMenu() {
+        dropdownMenu.style.display = 'none';
+    }
+
+    function showColorPalette() {
+        colorPalette.style.display = 'block';
+        colorPalette.style.zIndex = '30';
+    }
+
+    //menu button working
+    let isMenuVisible = false; // Initialize the menu visibility state
+
+    function toggleMenu() {
+        const menu = document.querySelector('.dropdown-menu');
+        isMenuVisible = !isMenuVisible; // Toggle the menu visibility state
+        if (isMenuVisible) {
+            menu.style.display = 'block';
+            menu.style.zIndex = '400'; // Increase the z-index when showing
+            showColorPalette();
+        } else {
+            menu.style.display = 'none';
+            menu.style.zIndex = '1'; // Lower the z-index when hiding
+            hideColorPalette();
+        }
+    }
+
+    menuButton.addEventListener('click', function () {
+        toggleMenu();
+        hideColorPalette();
+    });
+
+    toolButtons.forEach(tool => {
+        tool.addEventListener('click', function () {
+            hideDropdownMenu();
+            showColorPalette();
+        });
+    });
+
+    document.addEventListener('click', function (event) {
+        const target = event.target;
+        if (!target.closest('.dropdown-menu') && !target.closest('.b1')) {
+            hideDropdownMenu();
+        }
+        if (!target.closest('.color-palette') && !target.closest('.b1')) {
+            hideColorPalette();
+        }
+    });
+
+});
+
+function hideColorPalette() {
+    // const colorPalette = document.querySelector('.color-palette');
+    // colorPalette.style.display = 'none';
+}
+
+
+//touch device
+canvas.addEventListener('touchmove', (event) => {
+    event.preventDefault();
+    if (!drawing) return;
+    const touch = event.touches[0];
+
+    if (selectedTool === "pencil") {
+        drawFreehand(touch);
+    }else if (selectedTool === "diamond") {
+        drawD(touch);
+    }else if (selectedTool === "arrow") {
+        drawA(touch);
+    }else if (selectedTool === "line") {
+        drawL(touch);
+    }else if (selectedTool === "square") {
+        drawSquare(touch);
+    } else if (selectedTool === "circle") {
+        drawC(touch);
+    } else if (selectedTool === "eraser") {
+        eraser(touch);
+    }
+});
+
+// function drawFreehand(touch) {
+//     const x = touch.clientX - canvas.getBoundingClientRect().left;
+//     const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+//     ctx.lineTo(x, y);
+//     ctx.stroke();
+// }
+
+
+function drawFreehand(touch) {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!isDrawing) {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineWidth = 5; // Set the line width to 5 (adjust as needed)
+    }
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+}
+
+canvas.addEventListener('touchend', () => {
+    isDrawing = false;
+    ctx.closePath();
+});
+
+
+let startX, startY;
+let drawingSnapshot;  // Variable to store a snapshot of the canvas for preserving previous drawings
+
+function drawSquare(touch) {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!startX || !startY) {
+        startX = x;
+        startY = y;
+        drawingSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);  // Take a snapshot before drawing
+    }
+
+    // Calculate the square's size based on the difference between the starting point and the current touch position
+    const size = Math.max(Math.abs(x - startX), Math.abs(y - startY));
+
+    ctx.putImageData(drawingSnapshot, 0, 0);  // Restore the previous drawings
+
+    // Draw the square
+    ctx.beginPath();
+    ctx.rect(startX, startY, size, size);
+
+    if (fillColor.checked) {
+        ctx.fill();  // Fill the square if the fill color is checked
+    } else {
+        ctx.stroke();  // Draw the outline of the square
+    }
+}
+
+canvas.addEventListener('touchend', (event) => {
+    startX = null;  // Reset startX and startY when the touch ends
+    startY = null;
+});
+
+
+
+function drawD(touch) {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!prevMouseX || !prevMouseY) {
+        prevMouseX = x;
+        prevMouseY = y;
+        drawingSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.putImageData(drawingSnapshot, 0, 0);
+
+    ctx.beginPath();
+    const centerX = (prevMouseX + x) / 2;
+    const centerY = (prevMouseY + y) / 2;
+
+    ctx.moveTo(centerX, y); // Top point
+    ctx.lineTo(x, centerY);  // Right point
+    ctx.lineTo(centerX, prevMouseY); // Bottom point
+    ctx.lineTo(prevMouseX, centerY);  // Left point
+
+    ctx.closePath();
+    ctx.stroke();
+
+    if (fillColor.checked) {
+        ctx.fillStyle = selectedBgColor;
+        ctx.fill();
+    }
+}
+
+canvas.addEventListener('touchend', (event) => {
+    prevMouseX = null;
+    prevMouseY = null;
+});
+
+
+const drawA = (touch) => {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!prevMouseX || !prevMouseY) {
+        prevMouseX = x;
+        prevMouseY = y;
+        drawingSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.putImageData(drawingSnapshot, 0, 0);
+
+    ctx.beginPath();
+    ctx.moveTo(prevMouseX, prevMouseY);
+    ctx.lineTo(x, y);
+
+    const angle = Math.atan2(y - prevMouseY, x - prevMouseX);
+
+    const arrowHeadLength = 20;
+
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+
+    ctx.moveTo(-arrowHeadLength, arrowHeadLength);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(-arrowHeadLength, -arrowHeadLength);
+
+    ctx.restore();
+    ctx.stroke();
+};
+
+canvas.addEventListener('touchend', () => {
+    prevMouseX = null;
+    prevMouseY = null;
+});
+
+
+const drawL = (touch) => {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!prevMouseX || !prevMouseY) {
+        prevMouseX = x;
+        prevMouseY = y;
+        drawingSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.putImageData(drawingSnapshot, 0, 0);
+
+    ctx.beginPath();
+    ctx.moveTo(prevMouseX, prevMouseY);
+    ctx.lineTo(x, y);
+
+    const angle = Math.atan2(y - prevMouseY, x - prevMouseX);
+
+    const arrowHeadLength = 20;
+
+    ctx.stroke();
+
+    // Draw the arrowhead lines
+    ctx.moveTo(-arrowHeadLength, arrowHeadLength);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(-arrowHeadLength, -arrowHeadLength);
+};
+
+canvas.addEventListener('touchend', () => {
+    prevMouseX = null;
+    prevMouseY = null;
+});
+
+
+function drawC(touch) {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    if (!startX || !startY) {
+        startX = x;
+        startY = y;
+        drawingSnapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);  // Take a snapshot before drawing
+    }
+
+    // Calculate the radius of the circle based on the distance between the starting point and the current touch position
+    const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+
+    ctx.putImageData(drawingSnapshot, 0, 0);  // Restore the previous drawings
+
+    // Draw the circle
+    ctx.beginPath();
+    ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
+
+    if (fillColor.checked) {
+        ctx.fill();  // Fill the circle if the fill color is checked
+    } else {
+        ctx.stroke();  // Draw the outline of the circle
+    }
+}
+
+canvas.addEventListener('touchend', (event) => {
+    startX = null;  // Reset startX and startY when the touch ends
+    startY = null;
+});
+
+
+canvas.addEventListener('touchend', (event) => {
+    // startX = null;  // Reset startX and startY when the touch ends
+    // startY = null;
+});
+
+
+
+function eraser(touch) {
+    const x = touch.clientX - canvas.getBoundingClientRect().left;
+    const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+    const eraserSize = strokeWidth * 4; // Adjust the eraser size as needed
+
+    ctx.globalCompositeOperation = "destination-out"; // Use "destination-out" to erase
+    ctx.beginPath();
+    ctx.arc(x, y, eraserSize, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.globalCompositeOperation = "source-over"; // Reset composite operation
+}
+
+
+// Update the selected tool based on user interaction, e.g., button clicks
+toolBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        selectedTool = btn.id;
+    });
+});
